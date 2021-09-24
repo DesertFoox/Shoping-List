@@ -1,24 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Text } from "react-native-elements";
 import { View } from "react-native";
 
 import NetInfo from "@react-native-community/netinfo";
-import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SafeAreaView from "../Components/SafeAreaView/SafeAreaView";
 import Input from "../Components/Input/Input";
-import {InfoToast} from '../Components/Toast/Toast'
+import { ErrorToast, SuccessToast } from "../Components/Toast/Toast";
+import http from "../Core/Interceptor/Interceptor";
+import UserContext from "../Core/Context/UserContext";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [iConnected, setIConnected] = useState(null);
+  const userContext = useContext(UserContext);
+
   const login = () => {
     NetInfo.fetch().then((netInfo) => {
       setIConnected(netInfo.isConnected);
     });
+
     if (setIConnected) {
-      InfoToast('internet');
+      if (email === "" || password === "") {
+        ErrorToast("لطفا فیلد ها را پر کنید");
+      } else {
+        userContext.setIsLoggedIn(true);
+        
+        SuccessToast("کاربر عزیز با موفقیت وارد شدید");
+        setTimeout(() => {
+          navigation.navigate("ShopingList");
+        }, 2000);
+      }
+    }
+
+    if (!setIConnected) {
+      ErrorToast("برای استفاده از برنامه باید به اینترنت متصل باشید");
     }
   };
   return (

@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import UnAuthenticationApp from '../App/UnAuthenticationApp'
+import React, { Fragment, useContext, useState } from 'react';
+
+import Toast from 'react-native-toast-message';
+
+import UserProvider from '../Core/Provider/UserProvder';
+import CheckAuth from './CheckAuth'
 export default function App() {
   return (
-    <UnAuthenticationApp />
+    <UserProvider>
+      <CheckAuth />
+      <Toast ref={(ref) => Toast.setRef(ref)} />
+    </UserProvider>
   );
 }
 

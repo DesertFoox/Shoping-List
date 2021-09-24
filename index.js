@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
+import { CounterContextProvider } from './src/Core/Context/UserContext';
 
 import App from './src/Container/App';
 

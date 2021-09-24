@@ -17,7 +17,7 @@ export const InfoToast = (message) => {
 
 export const ErrorToast = (message) => {
   return Toast.show({
-    type: "error ",
+    type: "error",
     text1: message,
   });
 };

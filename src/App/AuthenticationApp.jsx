@@ -1,19 +1,25 @@
+import React from 'react';
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Login from '../Screens/Login'
-import Register from '../Screens/Register'
-import ShopingList from '../Screens/ShopingList'
+import ShopingList from "../Screens/ShopingList";
 
 const Stack = createNativeStackNavigator();
 
-export const AuthenticationApp = () => {
+const AuthenticationApp = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
+      <Stack.Navigator initialRouteName="ShopingList">
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="ShopingList"
+          component={ShopingList}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+export default AuthenticationApp;
