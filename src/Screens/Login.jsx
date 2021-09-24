@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
         ErrorToast("لطفا فیلد ها را پر کنید");
       } else {
         userContext.setIsLoggedIn(true);
-        
+        AsyncStorage.setItem("accessToken", "blablabla");
         SuccessToast("کاربر عزیز با موفقیت وارد شدید");
         setTimeout(() => {
           navigation.navigate("ShopingList");
