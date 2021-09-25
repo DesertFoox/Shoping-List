@@ -57,9 +57,8 @@ const ShopingList = () => {
       }
       setAllPrice(prices);
     }
-    await AsyncStorage.setItem("ShopLists", JSON.stringify(prods));
     setProducts(prods);
-
+    await AsyncStorage.setItem("ShopLists", JSON.stringify(prods));
     SuccessToast("این لیست خرید با موفقیت حذف شد");
   };
 

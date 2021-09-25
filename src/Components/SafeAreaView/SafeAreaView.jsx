@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 
 const SafeAreaView = ({ children, justify }) => {
   const styles = StyleSheet.create({
@@ -13,7 +13,11 @@ const SafeAreaView = ({ children, justify }) => {
     },
   });
 
-  return <View style={styles.container}>{children}</View>;
+  return (
+    <ScrollView style={{ backgroundColor: "#22272E" }}>
+      <View style={styles.container}>{children}</View>
+    </ScrollView>
+  );
 };
 
 export default SafeAreaView;
