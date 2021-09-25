@@ -29,34 +29,50 @@ const ShopingList = () => {
         price: productPrice,
         date: productDate,
       };
-      console.log("products: ", [...products, product]);
       setProducts([...products, product]);
       SuccessToast("لیست خرید جدید با موفقیت اضافه شد");
       await AsyncStorage.setItem("ShopLists", JSON.stringify(products));
     } else {
-      SuccessToast("لطفا فیلد ها را پر کنید");
+      ErrorToast("لطفا فیلد ها را پر کنید");
     }
     setLoading(false);
     setDisabledButton(false);
   };
 
-  useEffect(() => {
-    let prices = allPrice;
-    if (products.length) {
-      for (let i = 0; i < products.length; i++) {
-        prices += parseInt(products[i].price);
-      }
-      setAllPrice(prices);
-    }
-  }, [products]);
-
   const getShopLists = async () => {
     const prods = await AsyncStorage.getItem("ShopLists");
-    console.log(prods);
     if (prods !== null) {
       setProducts(JSON.parse(prods));
     }
   };
+
+  const deleteShopList = async (id) => {
+    const prods = products.filter((x) => x.id !== id);
+    let prices = allPrice;
+    if (products.length) {
+      for (let i = 0; i < products.length; i++) {
+        console.log("prodss", products[i].price);
+        prices -= parseInt(products[i].price);
+        console.log("prices: ", prices);
+      }
+      setAllPrice(prices);
+    }
+    await AsyncStorage.setItem("ShopLists", JSON.stringify(prods));
+    setProducts(prods);
+
+    SuccessToast("این لیست خرید با موفقیت حذف شد");
+  };
+
+  useEffect(() => {
+    let prices = 0;
+    if (products.length) {
+      for (let i = 0; i < products.length; i++) {
+        prices += parseInt(products[i].price);
+        console.log(products);
+      }
+      setAllPrice(prices);
+    }
+  }, [products]);
 
   useEffect(() => {
     getShopLists();
@@ -70,7 +86,9 @@ const ShopingList = () => {
           padding: 30,
         }}
         value={
-          <Text style={{ color: "#fff" }}>مجموع قیمت خرید ها {allPrice}</Text>
+          <Text style={{ color: "#fff", fontWeight: "bold" }}>
+            مجموع قیمت خرید ها : {allPrice} تومان
+          </Text>
         }
       />
       <View style={{ width: 350, marginTop: 70 }}>
@@ -102,12 +120,79 @@ const ShopingList = () => {
         </View>
       </View>
       <View>
+        <Badge
+          badgeStyle={{
+            backgroundColor: "#534F4F",
+            borderColor: "#534F4F",
+            padding: 30,
+            marginTop: 15,
+          }}
+          value={
+            <Text style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>
+              خرید ها
+            </Text>
+          }
+        />
         <ScrollView>
           {products.map((x, key) => (
-            <View key={key}>
-              <Text style={{ color: "#fff" }}>{x.name}</Text>
-              <Text style={{ color: "#fff" }}>{x.price}</Text>
-              <Text style={{ color: "#fff" }}>{x.date}</Text>
+            <View
+              style={{
+                backgroundColor: "#534F4F",
+                paddingHorizontal: 30,
+                paddingVertical: 15,
+                marginTop: 20,
+                width: 330,
+                flex: 1,
+                flexDirection: "row-reverse",
+                justifyContent: "space-between",
+                borderRadius: 10,
+              }}
+              key={key}
+            >
+              <View>
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontSize: 17,
+                    fontWeight: "bold",
+                    textAlign: "right",
+                  }}
+                >
+                  {x.name}
+                </Text>
+                <Text
+                  style={{
+                    color: "#00FF77",
+                    fontSize: 17,
+                    marginTop: 13,
+                    fontWeight: "bold",
+                    textAlign: "right",
+                  }}
+                >
+                  {" "}
+                  {x.price} تومان
+                </Text>
+              </View>
+              <View style={{}}>
+                <Text
+                  style={{ color: "#A7A7A7", fontSize: 15, fontWeight: "bold" }}
+                >
+                  {" "}
+                  {x.date}
+                </Text>
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    buttonStyle={{
+                      color: "#fff",
+                      backgroundColor: "#FD5353",
+                      width: 60,
+                    }}
+                    titleStyle={{ fontWeight: "bold" }}
+                    onPress={() => deleteShopList(x.id)}
+                    title="حذف"
+                  />
+                </View>
+              </View>
             </View>
           ))}
         </ScrollView>
